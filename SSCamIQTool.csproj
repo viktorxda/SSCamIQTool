@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>SSCamIQTool</AssemblyName>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>True</UseWindowsForms>
+		<TargetFramework>net48</TargetFramework>
+	</PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>11.0</LangVersion>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<ApplicationIcon>app.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\arrowLeft.png" />
+		<EmbeddedResource Include="Resources\arrowRight.png" />
+		<EmbeddedResource Include="Resources\back.png" />
+		<EmbeddedResource Include="Resources\btnCaptureImage.png" />
+		<EmbeddedResource Include="Resources\btnContinuousCapture.png" />
+		<EmbeddedResource Include="Resources\btnStartLiveView.png" />
+		<EmbeddedResource Include="Resources\btnVideo.png" />
+		<EmbeddedResource Include="Resources\connect.png" />
+		<EmbeddedResource Include="Resources\continuousCapture.png" />
+		<EmbeddedResource Include="Resources\continuousStop.png" />
+		<EmbeddedResource Include="Resources\disconnect.png" />
+		<EmbeddedResource Include="Resources\jpgimage.png" />
+		<EmbeddedResource Include="Resources\loadImgtool.png" />
+		<EmbeddedResource Include="Resources\next.png" />
+		<EmbeddedResource Include="Resources\play.png" />
+		<EmbeddedResource Include="Resources\rawimage.png" />
+		<EmbeddedResource Include="Resources\rawstream.png" />
+		<EmbeddedResource Include="Resources\refresh.png" />
+		<EmbeddedResource Include="Resources\saveImgtool.png" />
+		<EmbeddedResource Include="Resources\scaleimage.png" />
+		<EmbeddedResource Include="Resources\sigmastar.ico" />
+		<EmbeddedResource Include="Resources\sigmastar.png" />
+		<EmbeddedResource Include="Resources\stop.png" />
+		<EmbeddedResource Include="Resources\toolBtnReadAll.png" />
+		<EmbeddedResource Include="Resources\toolBtnWriteAll.png" />
+		<EmbeddedResource Include="Resources\transfer.png" />
+		<EmbeddedResource Include="Resources\videoCamera.png" />
+		<EmbeddedResource Include="Resources\videoImagetool.png" />
+		<EmbeddedResource Include="Resources\videoStop.png" />
+		<EmbeddedResource Include="Resources\yuvimage.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms.DataVisualization" />
+	</ItemGroup>
+</Project>
