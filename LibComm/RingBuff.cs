@@ -5,13 +5,13 @@ namespace SSCamIQTool.LibComm;
 
 internal class RingBuff
 {
-    private byte[] ringBuff;
+    private readonly byte[] ringBuff;
 
     private int nextWritePosition;
 
     private int nextReadPosition;
 
-    private int buffSize;
+    private readonly int buffSize;
 
     private int unusedSize;
 
@@ -119,17 +119,17 @@ internal class RingBuff
 
     public string GetBuffInfo()
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append(":writePositon:" + nextWritePosition);
-        stringBuilder.Append(".  readPosition:" + nextReadPosition);
-        stringBuilder.Append(".  size:");
-        stringBuilder.Append(buffSize);
-        stringBuilder.Append("   .enable read:" + (buffSize - unusedSize) + ".enable write:" + unusedSize);
-        stringBuilder.Append("\r\n");
-        stringBuilder.Append("1-10 byte: ");
+        StringBuilder stringBuilder = new();
+        _ = stringBuilder.Append(":writePositon:" + nextWritePosition);
+        _ = stringBuilder.Append(".  readPosition:" + nextReadPosition);
+        _ = stringBuilder.Append(".  size:");
+        _ = stringBuilder.Append(buffSize);
+        _ = stringBuilder.Append("   .enable read:" + (buffSize - unusedSize) + ".enable write:" + unusedSize);
+        _ = stringBuilder.Append("\r\n");
+        _ = stringBuilder.Append("1-10 byte: ");
         for (int i = 0; i < 10; i++)
         {
-            stringBuilder.Append(ringBuff[i]);
+            _ = stringBuilder.Append(ringBuff[i]);
         }
         return stringBuilder.ToString();
     }

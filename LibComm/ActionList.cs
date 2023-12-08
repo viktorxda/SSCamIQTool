@@ -5,7 +5,7 @@ namespace SSCamIQTool.LibComm;
 
 public class ActionList
 {
-    private List<ActionStep> actionList = new List<ActionStep>();
+    private List<ActionStep> actionList = new();
 
     private int index = -1;
 
@@ -48,15 +48,11 @@ public class ActionList
             ActionStep step = actionList[index];
             index--;
             int num = actionList.FindLastIndex(index, (s) => s.itemTag.Equals(step.itemTag));
-            if (num < 0)
-            {
-                return new ActionStep(step, isReset: true);
-            }
-            return actionList[num];
+            return num < 0 ? new ActionStep(step, isReset: true) : actionList[num];
         }
         if (index == 0)
         {
-            ActionStep result = new ActionStep(actionList[index], isReset: true);
+            ActionStep result = new(actionList[index], isReset: true);
             index--;
             return result;
         }

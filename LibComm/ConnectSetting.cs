@@ -2,62 +2,42 @@ namespace SSCamIQTool.LibComm;
 
 public class ConnectSetting
 {
-    private string hostName;
+    public string HostName { get; private set; }
 
-    private int port;
+    public int Port { get; private set; }
 
-    private int remoteID;
-
-    public string HostName => hostName;
-
-    public int Port => port;
-
-    public int RemoteID
-    {
-        get
-        {
-            return remoteID;
-        }
-        set
-        {
-            remoteID = value;
-        }
-    }
+    public int RemoteID { get; set; }
 
     public ConnectSetting()
     {
-        hostName = "";
-        port = 0;
-        remoteID = 0;
+        HostName = "";
+        Port = 0;
+        RemoteID = 0;
     }
 
     public ConnectSetting(string hostName, int port, int remoteID = 0)
     {
-        this.hostName = hostName;
-        this.port = port;
-        this.remoteID = remoteID;
+        HostName = hostName;
+        Port = port;
+        RemoteID = remoteID;
     }
 
     public bool IsEmpty()
     {
-        if (!hostName.Equals(""))
-        {
-            return false;
-        }
-        return true;
+        return HostName.Equals("");
     }
 
     public void Clear()
     {
-        hostName = "";
-        port = 0;
-        remoteID = 0;
+        HostName = "";
+        Port = 0;
+        RemoteID = 0;
     }
 
     public void CopyFrom(ConnectSetting setting)
     {
-        hostName = setting.hostName;
-        port = setting.port;
-        remoteID = setting.remoteID;
+        HostName = setting.HostName;
+        Port = setting.Port;
+        RemoteID = setting.RemoteID;
     }
 }

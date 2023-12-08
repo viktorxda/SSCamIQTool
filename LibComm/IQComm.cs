@@ -61,25 +61,20 @@ public class IQComm
 
     private bool m_bTransData;
 
-    private string m_ApplicationPath = "D:\\";
+    private string m_ApplicationPath = "D:/";
 
-    private byte[] end_of_line = new byte[1] { 13 };
-
-    private ChipID _chipID;
-
-    private CONNECT_MODE _connectMode;
-
-    public Queue<NetTaskContent> netTaskQueue = new Queue<NetTaskContent>();
+    private readonly byte[] end_of_line = new byte[1] { 13 };
+    public Queue<NetTaskContent> netTaskQueue = new();
 
     public bool _continue = true;
 
-    public string COM_num = "COM4";
+    public string COM_num = "COM1";
 
-    public SerialPort comport = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
+    public SerialPort comport = new("COM1", 115200, Parity.None, 8, StopBits.One);
 
     public string message;
 
-    private RingBuff rb = new RingBuff(512000);
+    private readonly RingBuff rb = new(512000);
 
     private Thread readThread;
 
@@ -89,29 +84,9 @@ public class IQComm
 
     public bool m_bUARTConnection;
 
-    public ChipID ChipIDName
-    {
-        get
-        {
-            return _chipID;
-        }
-        set
-        {
-            _chipID = value;
-        }
-    }
+    public ChipID ChipIDName { get; set; }
 
-    public CONNECT_MODE ConnectMode
-    {
-        get
-        {
-            return _connectMode;
-        }
-        set
-        {
-            _connectMode = value;
-        }
-    }
+    public CONNECT_MODE ConnectMode { get; set; }
 
     public IQConfig m_config { get; set; }
 
@@ -119,11 +94,9 @@ public class IQComm
 
     private string FormatString(string transformString)
     {
-        if (string.IsNullOrEmpty(transformString))
-        {
-            return transformString;
-        }
-        return transformString.Substring(0, 1).ToUpper() + (transformString.Length > 1 ? transformString.Substring(1).ToLower() : "");
+        return string.IsNullOrEmpty(transformString)
+            ? transformString
+            : transformString.Substring(0, 1).ToUpper() + (transformString.Length > 1 ? transformString.Substring(1).ToLower() : "");
     }
 
     public void SetApplicationPath(string strPath)
@@ -138,7 +111,7 @@ public class IQComm
 
     public void StartShowProgressBar(Control control)
     {
-        control.BeginInvoke(new ShowProgressBarHandler(ShowProgressBarFunction), "Recv Data...");
+        _ = control.BeginInvoke(new ShowProgressBarHandler(ShowProgressBarFunction), "Recv Data...");
     }
 
     private void TransProgressByValue(int value)
@@ -171,11 +144,13 @@ public class IQComm
 
     public void ShowProgressBar(string str)
     {
-        m_progressBar = new DialogProgress("Connecting", str);
-        m_progressBar.StartPosition = FormStartPosition.CenterParent;
-        m_progressBar.ProgressVisible = true;
-        m_progressBar.btnOKVisible = false;
-        m_progressBar.ShowDialog();
+        m_progressBar = new DialogProgress("Connecting", str)
+        {
+            StartPosition = FormStartPosition.CenterParent,
+            ProgressVisible = true,
+            btnOKVisible = false
+        };
+        _ = m_progressBar.ShowDialog();
     }
 
     public void updateTaskQueue(NetworkMethod method, object obj)
@@ -207,7 +182,7 @@ public class IQComm
         try
         {
             m_tcpClient = new TcpClient();
-            m_tcpClient.BeginConnect(hostName, port, null, null).AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5.0));
+            _ = m_tcpClient.BeginConnect(hostName, port, null, null).AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5.0));
             if (!m_tcpClient.Connected)
             {
                 throw new Exception("Failed to connect.");
@@ -229,7 +204,6 @@ public class IQComm
     {
         string text = "";
         string text2 = "LinkFromIQTool:";
-        string text3 = "";
         _ = text2.Length;
         byte[] array = new byte[text2.Length + 4 + 1];
         try
@@ -247,8 +221,8 @@ public class IQComm
             try
             {
                 Array.Clear(array, 0, array.Length);
-                m_streamClient.Read(array, 0, array.Length);
-                text3 = Encoding.Default.GetString(array);
+                _ = m_streamClient.Read(array, 0, array.Length);
+                string text3 = Encoding.Default.GetString(array);
                 if (text3.StartsWith("LinkFailed"))
                 {
                     text = "Match Failed\n\nID is Wrong";
@@ -268,19 +242,13 @@ public class IQComm
 
     public void Disconnect()
     {
-        if (m_streamClient != null)
-        {
-            m_streamClient.Close();
-        }
+        m_streamClient?.Close();
         if (m_tcpClient != null)
         {
             m_tcpClient.Close();
             m_tcpClient = null;
         }
-        if (comport != null)
-        {
-            comport.Close();
-        }
+        comport?.Close();
         m_bConnection = false;
     }
 
@@ -316,7 +284,7 @@ public class IQComm
         int num3 = 0;
         int num4 = Marshal.SizeOf(typeof(IQ_CMD_RESPONSE_S));
         string text2 = "";
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Reset();
         stopwatch.Start();
         IQ_CMD_RESPONSE_S result = default;
@@ -324,7 +292,7 @@ public class IQComm
         result.DataLen = 0;
         Array.Clear(array3, 0, array3.Length);
         array[0] = (int)cmdType;
-        array[1] = array2.Length * 4 + nSendLength;
+        array[1] = (array2.Length * 4) + nSendLength;
         array2[0] = (int)nDbgItemId;
         array2[1] = (int)cmdType;
         array2[2] = (int)nTransFlag;
@@ -364,12 +332,12 @@ public class IQComm
             }
             catch (Exception ex2)
             {
-                text = text + ex2.Message.ToString() + Environment.NewLine;
+                _ = text + ex2.Message.ToString() + Environment.NewLine;
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
                 Disconnect();
             }
         }
-        text2 = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
+        _ = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
         stopwatch.Stop();
         return result;
     }
@@ -385,10 +353,10 @@ public class IQComm
         byte[] array3 = new byte[num2 + num3 + nSendLength];
         int num4 = Marshal.SizeOf(typeof(IQ_CMD_RESPONSE_S));
         string text2 = "";
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Reset();
         stopwatch.Start();
-        IQ_CMD_RESPONSE_S result = new IQ_CMD_RESPONSE_S
+        IQ_CMD_RESPONSE_S result = new()
         {
             ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR,
             DataLen = 0
@@ -436,12 +404,12 @@ public class IQComm
             }
             catch (Exception ex2)
             {
-                text = text + ex2.Message.ToString() + Environment.NewLine;
+                _ = text + ex2.Message.ToString() + Environment.NewLine;
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
                 Disconnect();
             }
         }
-        text2 = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms.";
+        _ = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms.";
         stopwatch.Stop();
         return result;
     }
@@ -455,7 +423,7 @@ public class IQComm
         int num4 = 0;
         double num5 = 0.0;
         int num6 = 0;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendPacket(cmdType, itemId, nTransFlag, null, 0);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
@@ -478,20 +446,20 @@ public class IQComm
                         num5 = num6 / 1024 / (stopwatch.ElapsedMilliseconds / 1000.0);
                         num6 = 0;
                         stopwatch.Reset();
-                        control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
+                        _ = control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
                     }
-                    control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num4);
+                    _ = control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num4);
                 }
                 catch (Exception ex)
                 {
                     text = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
-                    control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+                    _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
                     return -1;
                 }
             }
-            control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+            _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
         }
         else
         {
@@ -505,7 +473,6 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         int dstOffset = 0;
         byte[] array = new byte[4];
         int[] array2 = new int[1];
@@ -517,7 +484,7 @@ public class IQComm
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array3 = new byte[num2];
                 try
@@ -531,7 +498,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -556,9 +523,8 @@ public class IQComm
         int[] array2 = new int[2];
         int num = 0;
         int num2 = Marshal.SizeOf(typeof(IQ_CMD_RESPONSE_S));
-        int num3 = 0;
         string text2 = "";
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Reset();
         stopwatch.Start();
         IQ_CMD_RESPONSE_S result = default;
@@ -590,7 +556,7 @@ public class IQComm
             try
             {
                 byte[] array3 = new byte[num2];
-                num3 = m_streamClient.Read(array3, 0, num2);
+                int num3 = m_streamClient.Read(array3, 0, num2);
                 result = Deserialize<IQ_CMD_RESPONSE_S>(array3);
                 Console.WriteLine(string.Concat("ResCode = ", result.ResCode, ", DataLen = ", result.DataLen));
                 if (num3 != num2 || result.ResCode != 0)
@@ -601,12 +567,12 @@ public class IQComm
             }
             catch (Exception ex2)
             {
-                text = text + ex2.Message.ToString() + Environment.NewLine;
+                _ = text + ex2.Message.ToString() + Environment.NewLine;
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
                 Disconnect();
             }
         }
-        text2 = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
+        _ = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
         stopwatch.Stop();
         return result;
     }
@@ -628,7 +594,7 @@ public class IQComm
                     }
                     else
                     {
-                        rb.WriteBuff(array, num);
+                        _ = rb.WriteBuff(array, num);
                     }
                 }
             }
@@ -779,7 +745,7 @@ public class IQComm
         }
         catch (Exception ex)
         {
-            text = text + ex.Message.ToString() + Environment.NewLine;
+            _ = text + ex.Message.ToString() + Environment.NewLine;
         }
         return result;
     }
@@ -801,7 +767,7 @@ public class IQComm
         result.DataLen = 0;
         Array.Clear(array3, 0, array3.Length);
         array[0] = (int)cmdType;
-        array[1] = array2.Length * 4 + nSendLength;
+        array[1] = (array2.Length * 4) + nSendLength;
         array2[0] = (int)nDbgItemId;
         array2[1] = (int)cmdType;
         array2[2] = (int)nTransFlag;
@@ -851,7 +817,7 @@ public class IQComm
                 if (num2 != 1)
                 {
                     text += "receive data len is not enugnous";
-                    MessageBox.Show("receive data len is not enugnous");
+                    _ = MessageBox.Show("receive data len is not enugnous");
                     return result;
                 }
                 result = Deserialize<IQ_CMD_RESPONSE_S>(array4);
@@ -859,12 +825,12 @@ public class IQComm
                 {
                     result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
                     text += "iq server response error";
-                    MessageBox.Show("receive response error");
+                    _ = MessageBox.Show("receive response error");
                 }
             }
             catch (Exception ex2)
             {
-                text = text + ex2.Message.ToString() + Environment.NewLine;
+                _ = text + ex2.Message.ToString() + Environment.NewLine;
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
                 Disconnect();
             }
@@ -876,7 +842,6 @@ public class IQComm
     {
         string text = "";
         int result = 0;
-        int num = 0;
         int dstOffset = 0;
         byte[] array = new byte[4];
         int[] array2 = new int[1];
@@ -888,7 +853,7 @@ public class IQComm
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num = iQ_CMD_RESPONSE_S.DataLen;
+                int num = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num];
                 _ = new byte[num];
                 Thread.Sleep(getWaitDataTime(iQ_CMD_RESPONSE_S.DataLen));
@@ -896,14 +861,14 @@ public class IQComm
                 {
                     if (rb.ReadBuff(pbyRcvData, num, MovePosition: true) != num)
                     {
-                        MessageBox.Show("data not enough.");
+                        _ = MessageBox.Show("data not enough.");
                         return -1;
                     }
                     result = num;
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -930,7 +895,7 @@ public class IQComm
         int num4 = 0;
         double num5 = 0.0;
         int num6 = 0;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendUartPacket(cmdType, itemId, nTransFlag, null, 0);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
@@ -956,11 +921,11 @@ public class IQComm
                     num5 = num6 / 1024 / (stopwatch.ElapsedMilliseconds / 1000.0);
                     num6 = 0;
                     stopwatch.Reset();
-                    control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
+                    _ = control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
                 }
-                control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num4);
+                _ = control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num4);
             }
-            control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+            _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
         }
         else
         {
@@ -973,7 +938,7 @@ public class IQComm
     {
         string result = "";
         COM_num = UART_COM_num;
-        if (COM_num != "COM4")
+        if (COM_num != "COM1")
         {
             comport = new SerialPort(COM_num, 115200, Parity.None, 8, StopBits.One);
         }
@@ -1009,7 +974,7 @@ public class IQComm
         }
         catch (Exception ex)
         {
-            text = text + ex.Message.ToString() + Environment.NewLine;
+            _ = text + ex.Message.ToString() + Environment.NewLine;
         }
     }
 
@@ -1026,11 +991,7 @@ public class IQComm
         }
         int num2 = data_len / 11;
         _ = data_len % 11;
-        if (num2 <= 0)
-        {
-            return 5;
-        }
-        return num2 + 5;
+        return num2 <= 0 ? 5 : num2 + 5;
     }
 
     public int ReceiveUartApiPacket(short ApiId, out byte[] pbyRcvData)
@@ -1094,8 +1055,7 @@ public class IQComm
     public int ReceiveUartInitialApiPacketByType(CAMERA_CMD_TYPE type, short ApiId, byte[] bufferInitial, out byte[] pbyRcvData)
     {
         int num = 0;
-        byte[] array = null;
-        array = BitConverter.GetBytes(ApiId);
+        byte[] array = BitConverter.GetBytes(ApiId);
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = AFWindowsAPIID(ChipIDName, ApiId) != 1 ? SendUartApiPacket(type, bufferInitial, array.Length) : SendUartApiPacket(type, bufferInitial, 20);
         Thread.Sleep(getWaitDataTime(iQ_CMD_RESPONSE_S.DataLen));
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
@@ -1154,13 +1114,12 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendApiPacket(cmdType, pSendData, pSendData.Length);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array = new byte[num2];
                 try
@@ -1175,7 +1134,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1197,19 +1156,16 @@ public class IQComm
     {
         string text = "";
         int num = 0;
-        int num2 = 0;
         int i = 0;
-        byte[] array = null;
-        byte[] array2 = null;
-        array = BitConverter.GetBytes(ApiId);
+        byte[] array = BitConverter.GetBytes(ApiId);
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = AFWindowsAPIID(ChipIDName, ApiId) != 1 ? SendApiPacket(type, bufferInitial, array.Length) : SendApiPacket(type, bufferInitial, 20);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
-                array2 = new byte[num2];
+                byte[] array2 = new byte[num2];
                 try
                 {
                     for (; i < num2; i += num)
@@ -1221,7 +1177,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1244,14 +1200,13 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         byte[] bytes = BitConverter.GetBytes(ApiId);
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = AFWindowsAPIID(ChipIDName, ApiId) != 1 ? SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, bufferInitial, bytes.Length) : SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, bufferInitial, 20);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array = new byte[num2];
                 try
@@ -1265,7 +1220,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1288,14 +1243,13 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         byte[] bytes = BitConverter.GetBytes(ApiId);
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, bytes, bytes.Length);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array = new byte[num2];
                 try
@@ -1309,7 +1263,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1332,7 +1286,6 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         byte[] array = new byte[60];
         array[0] = 1;
         array[2] = 1;
@@ -1342,7 +1295,7 @@ public class IQComm
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array2 = new byte[num2];
                 try
@@ -1356,7 +1309,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1379,7 +1332,6 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         byte[] array = new byte[60];
         array[0] = 1;
         array[2] = 1;
@@ -1389,7 +1341,7 @@ public class IQComm
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array2 = new byte[num2];
                 try
@@ -1403,7 +1355,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1448,7 +1400,7 @@ public class IQComm
         int num4 = 0;
         double num5 = 0.0;
         int num6 = 0;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         if (ConnectMode == CONNECT_MODE.MODE_SOCKET)
         {
             iQ_CMD_RESPONSE_S = SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_DOWNLOAD_FILE, array, array.Length);
@@ -1499,14 +1451,14 @@ public class IQComm
                                 num5 = num4 / 1024 / (stopwatch.ElapsedMilliseconds / 1000.0);
                                 num4 = 0;
                                 stopwatch.Reset();
-                                control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
+                                _ = control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num5);
                             }
-                            control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num6);
+                            _ = control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), num6);
                         }
                     }
                     if (ConnectMode == CONNECT_MODE.MODE_UART)
                     {
-                        control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+                        _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
                     }
                 }
                 catch (Exception ex)
@@ -1514,7 +1466,7 @@ public class IQComm
                     text = text + ex.Message.ToString() + Environment.NewLine;
                     if (ConnectMode == CONNECT_MODE.MODE_UART)
                     {
-                        control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+                        _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
                     }
                     Disconnect();
                     pbyRcvData = null;
@@ -1538,20 +1490,19 @@ public class IQComm
         string text = "";
         int num = 0;
         int i = 0;
-        int num2 = 0;
         byte[] array = new byte[102400];
         array[0] = Convert.ToByte(ApiId);
         array[2] = 1;
         array[8] = Convert.ToByte(APIVerMinor & 0xFF);
-        array[9] = Convert.ToByte(APIVerMinor >> 8 & 0xFF);
+        array[9] = Convert.ToByte((APIVerMinor >> 8) & 0xFF);
         array[10] = Convert.ToByte(APIVerMajor & 0xFF);
-        array[11] = Convert.ToByte(APIVerMajor >> 8 & 0xFF);
+        array[11] = Convert.ToByte((APIVerMajor >> 8) & 0xFF);
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_DOWNLOAD_FILE, array, array.Length);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num2 = iQ_CMD_RESPONSE_S.DataLen;
+                int num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num2];
                 byte[] array2 = new byte[num2];
                 try
@@ -1572,7 +1523,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     Disconnect();
                     pbyRcvData = null;
                     return -1;
@@ -1592,7 +1543,7 @@ public class IQComm
 
     private uint localFun(ushort precent, CALLBACK_DATA_STRUCT lpCallbackData)
     {
-        lpCallbackData.control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), precent);
+        _ = lpCallbackData.control.Invoke(new UpdateTransProgressByValueHandler(TransProgressByValue), precent);
         return 0u;
     }
 
@@ -1600,16 +1551,16 @@ public class IQComm
     private static extern int ShowVideoDevDlg(byte[] msg, int buf_len);
 
     [DllImport("AitUVCExtApi.dll")]
-    private unsafe static extern int AITAPI_OpenDeviceByPath(byte[] msg, IntPtr* pDevHandle);
+    private static extern unsafe int AITAPI_OpenDeviceByPath(byte[] msg, IntPtr* pDevHandle);
 
     [DllImport("AitUVCExtApi.dll")]
     private static extern int AITAPI_GetFWVersion(IntPtr pDevHandle, byte[] msg);
 
     [DllImport("AitUVCExtApi.dll", EntryPoint = "AITAPI_UpdateFW_842x")]
-    private unsafe static extern int AITAPI_UpdateFW(IntPtr pDevHandle, byte[] data, int len, void* ProgressCB, void* callbackData, byte mode);
+    private static extern unsafe int AITAPI_UpdateFW(IntPtr pDevHandle, byte[] data, int len, void* ProgressCB, void* callbackData, byte mode);
 
     [DllImport("AitUVCExtApi.dll")]
-    private unsafe static extern int AITAPI_SendData(IntPtr pDevHandle, byte[] data, int len, void* ProgressCB, void* callbackData, byte StorageType, byte PackageType);
+    private static extern unsafe int AITAPI_SendData(IntPtr pDevHandle, byte[] data, int len, void* ProgressCB, void* callbackData, byte StorageType, byte PackageType);
 
     [DllImport("AitUVCExtApi.dll")]
     private static extern int AITAPI_ReadPartialFlashData(IntPtr pDevHandle, uint FlashAddr, uint Len, byte[] buf, uint[] byteRet, callBackHandler callBackFunc, CALLBACK_DATA_STRUCT lpCallBackData);
@@ -1623,7 +1574,7 @@ public class IQComm
         byte[] outdata = new byte[8];
         array[0] = 25;
         array[1] = 1;
-        AITXU_IspCommand(m_ait_handel, array, outdata);
+        _ = AITXU_IspCommand(m_ait_handel, array, outdata);
     }
 
     public unsafe string USBConnect()
@@ -1632,20 +1583,20 @@ public class IQComm
         try
         {
             byte[] msg = new byte[1024];
-            ShowVideoDevDlg(msg, 1024);
+            _ = ShowVideoDevDlg(msg, 1024);
             fixed (IntPtr* pDevHandle = &m_ait_handel)
             {
                 if (AITAPI_OpenDeviceByPath(msg, pDevHandle) != 0)
                 {
-                    result = "Oepn USB device failed!";
+                    result = "Open USB device failed!";
                     m_bUSBConnection = false;
-                    Console.WriteLine("Oepn USB device failed!");
+                    Console.WriteLine("Open USB device failed!");
                 }
                 else
                 {
                     EnableIQServerMode();
                     m_bUSBConnection = true;
-                    Console.WriteLine("Oepn USB device succeed!");
+                    Console.WriteLine("Open USB device succeed!");
                 }
             }
         }
@@ -1665,8 +1616,7 @@ public class IQComm
         int num = 0;
         int num2 = Marshal.SizeOf(typeof(IQ_CMD_RESPONSE_S));
         string text2 = "";
-        byte b = 0;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Reset();
         stopwatch.Start();
         IQ_CMD_RESPONSE_S result = default;
@@ -1677,7 +1627,7 @@ public class IQComm
         array2[1] = nSendLength;
         Buffer.BlockCopy(array2, 0, array, num, array2.Length * 4);
         num += array2.Length * 4;
-        b = (byte)(cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE && cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_API && cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_PIC ? 6 : 7);
+        byte b = (byte)(cmdType is not CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE and not CAMERA_CMD_TYPE.CAMERA_CMD_GET_API and not CAMERA_CMD_TYPE.CAMERA_CMD_GET_PIC ? 6 : 7);
         try
         {
             if (pSendData != null)
@@ -1686,7 +1636,7 @@ public class IQComm
             }
             num += nSendLength;
             string text3 = "";
-            Stopwatch stopwatch2 = new Stopwatch();
+            Stopwatch stopwatch2 = new();
             stopwatch2.Reset();
             stopwatch2.Start();
             if (Send_IQData(m_ait_handel, array, num, 0, b) != 0)
@@ -1697,7 +1647,7 @@ public class IQComm
             else
             {
                 byte[] array3 = new byte[num2];
-                Get_IQResponseData(m_ait_handel, array3, num2);
+                _ = Get_IQResponseData(m_ait_handel, array3, num2);
                 result = Deserialize<IQ_CMD_RESPONSE_S>(array3);
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_OK;
                 Console.WriteLine("Send IQ Data OK!");
@@ -1727,10 +1677,9 @@ public class IQComm
         _ = array2.Length;
         _ = array3.Length;
         int num = 0;
-        byte b = 0;
         int num2 = Marshal.SizeOf(typeof(IQ_CMD_RESPONSE_S));
         string text2 = "";
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         stopwatch.Reset();
         stopwatch.Start();
         IQ_CMD_RESPONSE_S result = default;
@@ -1738,7 +1687,7 @@ public class IQComm
         result.DataLen = 0;
         Array.Clear(array, 0, array.Length);
         array2[0] = (int)cmdType;
-        array2[1] = array3.Length * 4 + nSendLength;
+        array2[1] = (array3.Length * 4) + nSendLength;
         array3[0] = (int)nDbgItemId;
         array3[1] = (int)cmdType;
         array3[2] = (int)nTransFlag;
@@ -1746,7 +1695,7 @@ public class IQComm
         num += array2.Length * 4;
         Buffer.BlockCopy(array3, 0, array, num, array3.Length * 4);
         num += array3.Length * 4;
-        b = (byte)(cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE && cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_API && cmdType != CAMERA_CMD_TYPE.CAMERA_CMD_GET_PIC ? 6 : 7);
+        byte b = (byte)(cmdType is not CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE and not CAMERA_CMD_TYPE.CAMERA_CMD_GET_API and not CAMERA_CMD_TYPE.CAMERA_CMD_GET_PIC ? 6 : 7);
         try
         {
             if (pSendData != null)
@@ -1755,7 +1704,7 @@ public class IQComm
             }
             num += nSendLength;
             string text3 = "";
-            Stopwatch stopwatch2 = new Stopwatch();
+            Stopwatch stopwatch2 = new();
             stopwatch2.Reset();
             stopwatch2.Start();
             if (Send_IQData(m_ait_handel, array, num, 0, b) != 0)
@@ -1766,7 +1715,7 @@ public class IQComm
             else
             {
                 byte[] array4 = new byte[num2];
-                Get_IQResponseData(m_ait_handel, array4, num2);
+                _ = Get_IQResponseData(m_ait_handel, array4, num2);
                 result = Deserialize<IQ_CMD_RESPONSE_S>(array4);
                 result.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_OK;
                 Console.WriteLine("Send IQ Data OK!");
@@ -1778,10 +1727,10 @@ public class IQComm
         catch (Exception ex)
         {
             Disconnect();
-            text = text + ex.Message.ToString() + Environment.NewLine;
+            _ = text + ex.Message.ToString() + Environment.NewLine;
         }
         text2 = text2 + "Dbg" + nDbgItemId + ": Write " + stopwatch.ElapsedMilliseconds + " ms, ";
-        text2 = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
+        _ = text2 + "Read " + stopwatch.ElapsedMilliseconds + " ms, ";
         stopwatch.Stop();
         return result;
     }
@@ -1799,7 +1748,6 @@ public class IQComm
     public int ReceiveUSBInitialApiPacket(short ApiId, byte[] bufferInitial, out byte[] pbyRcvData)
     {
         string text = "";
-        int num = 0;
         byte[] array = new byte[8 + bufferInitial.Length];
         int[] array2 = new int[2];
         int num2 = 0;
@@ -1808,12 +1756,12 @@ public class IQComm
         array2[1] = bufferInitial.Length;
         Buffer.BlockCopy(array2, 0, array, num2, array2.Length * 4);
         num2 += array2.Length * 4;
-        num = bufferInitial.Length;
+        int num = bufferInitial.Length;
         pbyRcvData = new byte[num];
         try
         {
             string text2 = "";
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
             stopwatch.Reset();
             stopwatch.Start();
             if (bufferInitial != null)
@@ -1843,7 +1791,7 @@ public class IQComm
         }
         catch (Exception ex)
         {
-            text = text + ex.Message.ToString() + Environment.NewLine;
+            _ = text + ex.Message.ToString() + Environment.NewLine;
             Disconnect();
             pbyRcvData = null;
             return -1;
@@ -1854,7 +1802,6 @@ public class IQComm
     public int ReceiveUSBInitialApiPacketByType(CAMERA_CMD_TYPE type, short ApiId, byte[] bufferInitial, out byte[] pbyRcvData)
     {
         int num = 0;
-        int num2 = 0;
         string text = "";
         byte[] array = null;
         int[] array2 = new int[2];
@@ -1864,12 +1811,12 @@ public class IQComm
         array2[1] = bufferInitial.Length;
         Buffer.BlockCopy(array2, 0, array3, num, array2.Length * 4);
         num += array2.Length * 4;
-        num2 = bufferInitial.Length;
+        int num2 = bufferInitial.Length;
         pbyRcvData = new byte[num2];
         try
         {
             string text2 = "";
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
             stopwatch.Reset();
             stopwatch.Start();
             if (bufferInitial != null)
@@ -1898,7 +1845,7 @@ public class IQComm
         }
         catch (Exception ex)
         {
-            text = text + ex.Message.ToString() + Environment.NewLine;
+            _ = text + ex.Message.ToString() + Environment.NewLine;
             Disconnect();
             pbyRcvData = null;
             return -1;
@@ -1927,7 +1874,7 @@ public class IQComm
         try
         {
             string text2 = "";
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
             stopwatch.Reset();
             stopwatch.Start();
             if (pSendData != null)
@@ -1971,13 +1918,12 @@ public class IQComm
     {
         string text = "";
         int result = 0;
-        int num = 0;
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendUSBApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, pSendData, pSendData.Length);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK)
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num = iQ_CMD_RESPONSE_S.DataLen;
+                int num = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num];
                 result = num;
                 try
@@ -1991,7 +1937,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     pbyRcvData = null;
                     return -1;
                 }
@@ -2010,18 +1956,16 @@ public class IQComm
 
     public int ReceiveUsbApiPacket(short ApiId, out byte[] pbyRcvData)
     {
-        string text = "";
-        int num = 0;
         int result = 0;
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendUSBPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, (uint)ApiId, 0u, null, 0);
-        text = "";
+        string text = "";
         pbyRcvData = null;
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK && iQ_CMD_RESPONSE_S.DataLen > 0)
         {
             try
             {
                 pbyRcvData = new byte[iQ_CMD_RESPONSE_S.DataLen];
-                num = iQ_CMD_RESPONSE_S.DataLen;
+                int num = iQ_CMD_RESPONSE_S.DataLen;
                 _ = new byte[num];
                 result = iQ_CMD_RESPONSE_S.DataLen;
                 if (Get_IQData(m_ait_handel, 0, null, (uint)num, pbyRcvData) != 0)
@@ -2033,8 +1977,7 @@ public class IQComm
             }
             catch (Exception ex)
             {
-                result = 0;
-                text = text + ex.Message.ToString() + Environment.NewLine;
+                _ = text + ex.Message.ToString() + Environment.NewLine;
                 Disconnect();
                 pbyRcvData = null;
                 return -1;
@@ -2047,7 +1990,6 @@ public class IQComm
     {
         string text = "";
         int result = 0;
-        int num = 0;
         byte[] array = new byte[4];
         int[] array2 = new int[1];
         Array.Clear(array, 0, array.Length);
@@ -2058,7 +2000,7 @@ public class IQComm
         {
             if (iQ_CMD_RESPONSE_S.DataLen > 0)
             {
-                num = iQ_CMD_RESPONSE_S.DataLen;
+                int num = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[num];
                 result = num;
                 try
@@ -2072,7 +2014,7 @@ public class IQComm
                 }
                 catch (Exception ex)
                 {
-                    text = text + ex.Message.ToString() + Environment.NewLine;
+                    _ = text + ex.Message.ToString() + Environment.NewLine;
                     pbyRcvData = null;
                     return -1;
                 }
@@ -2097,7 +2039,7 @@ public class IQComm
         double num3 = 0.0;
         int num4 = 0;
         pbyRcvData = null;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = SendUSBPacket(cmdType, itemId, nTransFlag, null, 0);
         if (iQ_CMD_RESPONSE_S.ResCode == IQ_RESPONSE_CODE_E.IQ_RES_OK && iQ_CMD_RESPONSE_S.DataLen > 0)
         {
@@ -2110,9 +2052,11 @@ public class IQComm
                 num2 = iQ_CMD_RESPONSE_S.DataLen;
                 pbyRcvData = new byte[iQ_CMD_RESPONSE_S.DataLen];
                 num = iQ_CMD_RESPONSE_S.DataLen;
-                CALLBACK_DATA_STRUCT cALLBACK_DATA_STRUCT = new CALLBACK_DATA_STRUCT();
-                cALLBACK_DATA_STRUCT.lpIQcomm = this;
-                cALLBACK_DATA_STRUCT.control = control;
+                CALLBACK_DATA_STRUCT cALLBACK_DATA_STRUCT = new()
+                {
+                    lpIQcomm = this,
+                    control = control
+                };
                 callBackHandler lpFunc = localFun;
                 if (Get_IQData(m_ait_handel, 0, null, (uint)num2, pbyRcvData, lpFunc, cALLBACK_DATA_STRUCT) != 0)
                 {
@@ -2127,7 +2071,7 @@ public class IQComm
                     num3 = num4 / 1024 / (stopwatch.ElapsedMilliseconds / 1000.0);
                     num4 = 0;
                     stopwatch.Reset();
-                    control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num3);
+                    _ = control.Invoke(new UpdateTransProgressByNetSpeedHandler(TransProgressByNetSpeed), num3);
                 }
             }
             catch (Exception ex)
@@ -2135,10 +2079,10 @@ public class IQComm
                 text = text + ex.Message.ToString() + Environment.NewLine;
                 Disconnect();
                 pbyRcvData = null;
-                control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+                _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
                 return -1;
             }
-            control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
+            _ = control.Invoke(new UpdateTransFinishHandler(TransFinish), text);
         }
         return num;
     }
@@ -2154,7 +2098,7 @@ public class IQComm
             return -1;
         }
         string text = "";
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         if (CmdData_Data != null && CmdData_Size != 0)
         {
             stopwatch.Reset();
@@ -2191,8 +2135,7 @@ public class IQComm
 
     public string GetChipNameByID(ChipID chipId, STRING_OPERATE_TYPE_E type)
     {
-        string text = "";
-        text = m_chiplist[(ulong)chipId];
+        string text = m_chiplist[(ulong)chipId];
         switch (type)
         {
             case STRING_OPERATE_TYPE_E.TYPE_UPPER_E:

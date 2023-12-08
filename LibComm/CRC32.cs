@@ -44,7 +44,7 @@ public class CRC32
         {
             if (checksumVer == 0)
             {
-                num = num >> 8 ^ crctab[(num ^ b) & 0xFF];
+                num = (num >> 8) ^ crctab[(num ^ b) & 0xFF];
             }
             else if (checksumVer > 0)
             {

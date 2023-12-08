@@ -40,15 +40,14 @@ public class GuiPage
     public string ReadPage(IQComm comm)
     {
         string text = "";
-        string text2 = "";
         recvLengthForCaliSpeed = 0;
-        if (Action == PAGE_ACTION.R || Action == PAGE_ACTION.RW)
+        if (Action is PAGE_ACTION.R or PAGE_ACTION.RW)
         {
             if (GroupIndex == -1)
             {
                 for (int i = 0; i < GroupList.Count; i++)
                 {
-                    text2 = GroupList[i].Name == "CaliDBPath" || GroupList[i].Name == "CaliPath" ? GroupList[i].ReadGroupBySending(comm) : GroupList[i].Name == "BypassItem" ? GroupList[i].ReadByPass(comm) : !GroupList[i].Name.StartsWith("NIR_IQ") ? GroupList[i].ReadGroup(comm) : GroupList[i].ReadNirIQGroup(comm);
+                    string text2 = GroupList[i].Name is "CaliDBPath" or "CaliPath" ? GroupList[i].ReadGroupBySending(comm) : GroupList[i].Name == "BypassItem" ? GroupList[i].ReadByPass(comm) : !GroupList[i].Name.StartsWith("NIR_IQ") ? GroupList[i].ReadGroup(comm) : GroupList[i].ReadNirIQGroup(comm);
                     recvLengthForCaliSpeed += GroupList[i].recvLengthForCaliSpeed;
                     if (text2 != "")
                     {
@@ -77,15 +76,14 @@ public class GuiPage
     public string ReadUartPage(IQComm comm)
     {
         string text = "";
-        string text2 = "";
         recvLengthForCaliSpeed = 0;
-        if (Action == PAGE_ACTION.R || Action == PAGE_ACTION.RW)
+        if (Action is PAGE_ACTION.R or PAGE_ACTION.RW)
         {
             if (GroupIndex == -1)
             {
                 for (int i = 0; i < GroupList.Count; i++)
                 {
-                    text2 = GroupList[i].Name == "CaliDBPath" || GroupList[i].Name == "CaliPath" ? GroupList[i].ReadGroupBySending(comm) : !(GroupList[i].Name == "BypassItem") ? GroupList[i].ReadUartGroup(comm) : GroupList[i].ReadByPass(comm);
+                    string text2 = GroupList[i].Name is "CaliDBPath" or "CaliPath" ? GroupList[i].ReadGroupBySending(comm) : !(GroupList[i].Name == "BypassItem") ? GroupList[i].ReadUartGroup(comm) : GroupList[i].ReadByPass(comm);
                     recvLengthForCaliSpeed += GroupList[i].recvLengthForCaliSpeed;
                     if (text2 != "")
                     {
@@ -103,9 +101,8 @@ public class GuiPage
 
     public string ReadUnionGroup(IQComm comm)
     {
-        string text = "";
         byte[] apiBuffer = null;
-        text = GroupList[0].ReadGroup(comm, ref apiBuffer);
+        string text = GroupList[0].ReadGroup(comm, ref apiBuffer);
         recvLengthForCaliSpeed += GroupList[0].recvLengthForCaliSpeed;
         foreach (GuiItem item in GroupList[0].ItemList)
         {
@@ -137,7 +134,7 @@ public class GuiPage
     {
         string text = "";
         string text2 = "";
-        if (Action == PAGE_ACTION.RW || Action == PAGE_ACTION.W)
+        if (Action is PAGE_ACTION.RW or PAGE_ACTION.W)
         {
             if (GroupIndex == -1)
             {
@@ -165,7 +162,7 @@ public class GuiPage
     {
         string text = "";
         string text2 = "";
-        if (Action == PAGE_ACTION.RW || Action == PAGE_ACTION.W)
+        if (Action is PAGE_ACTION.RW or PAGE_ACTION.W)
         {
             if (GroupIndex == -1)
             {

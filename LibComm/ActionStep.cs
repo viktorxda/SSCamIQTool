@@ -32,11 +32,7 @@ public class ActionStep
 
     public bool IsEqual(ActionStep step)
     {
-        if (step.pageIndex == pageIndex && step.isReset == isReset && step.itemTag == itemTag && step.dataIndex == dataIndex && IsDataEquals(step))
-        {
-            return true;
-        }
-        return false;
+        return step.pageIndex == pageIndex && step.isReset == isReset && step.itemTag == itemTag && step.dataIndex == dataIndex && IsDataEquals(step);
     }
 
     private bool IsDataEquals(ActionStep step)

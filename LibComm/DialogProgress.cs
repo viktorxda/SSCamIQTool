@@ -6,11 +6,11 @@ namespace SSCamIQTool.LibComm;
 
 public class DialogProgress : Form
 {
-    private string m_strProcessText = "Transfer Data...";
+    private readonly string m_strProcessText = "Transfer Data...";
 
     private double m_netSpeedKBps;
 
-    private IContainer components = null;
+    private readonly IContainer components = null;
 
     private Button btnProcessOk;
 
@@ -20,30 +20,17 @@ public class DialogProgress : Form
 
     public int ProgressValue
     {
-        get
-        {
-            return pgbarProcessing.Value;
-        }
+        get => pgbarProcessing.Value;
         set
         {
-            if (value <= pgbarProcessing.Maximum && value >= pgbarProcessing.Minimum)
-            {
-                pgbarProcessing.Value = value;
-            }
-            else
-            {
-                pgbarProcessing.Value = pgbarProcessing.Minimum;
-            }
+            pgbarProcessing.Value = value <= pgbarProcessing.Maximum && value >= pgbarProcessing.Minimum ? value : pgbarProcessing.Minimum;
             lbProgressTitle.Text = m_strProcessText + pgbarProcessing.Value + "%        " + m_netSpeedKBps.ToString("f2") + "KB/s";
         }
     }
 
     public double NetSpeed
     {
-        get
-        {
-            return m_netSpeedKBps;
-        }
+        get => m_netSpeedKBps;
         set
         {
             m_netSpeedKBps = value;
@@ -53,26 +40,14 @@ public class DialogProgress : Form
 
     public bool btnOKVisible
     {
-        get
-        {
-            return btnProcessOk.Visible;
-        }
-        set
-        {
-            btnProcessOk.Visible = value;
-        }
+        get => btnProcessOk.Visible;
+        set => btnProcessOk.Visible = value;
     }
 
     public bool ProgressVisible
     {
-        get
-        {
-            return pgbarProcessing.Visible;
-        }
-        set
-        {
-            pgbarProcessing.Visible = value;
-        }
+        get => pgbarProcessing.Visible;
+        set => pgbarProcessing.Visible = value;
     }
 
     public DialogProgress()

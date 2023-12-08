@@ -31,25 +31,13 @@ public class GuiItem
 
     public const string METERING_WEIGHTING_TEXT = "WindowWeighting";
 
-    public int ItemSize
+    public int ItemSize => ValueType switch
     {
-        get
-        {
-            switch (ValueType)
-            {
-                case ITEM_TYPE.U8:
-                    return 1;
-                case ITEM_TYPE.U16:
-                case ITEM_TYPE.S16:
-                    return 2;
-                case ITEM_TYPE.U32:
-                case ITEM_TYPE.S32:
-                    return 4;
-                default:
-                    return 0;
-            }
-        }
-    }
+        ITEM_TYPE.U8 => 1,
+        ITEM_TYPE.U16 or ITEM_TYPE.S16 => 2,
+        ITEM_TYPE.U32 or ITEM_TYPE.S32 => 4,
+        _ => 0,
+    };
 
     public int ValueSize => ItemSize * XSize * YSize;
 
@@ -167,7 +155,7 @@ public class GuiItem
     public string WriteByPass(IQComm comm, short apiID)
     {
         string result = "";
-        int.Parse(Paramters);
+        _ = int.Parse(Paramters);
         short[] src = new short[1] { apiID };
         short[] src2 = new short[1] { 2 };
         int[] src3 = new int[2] { 0, 4 };

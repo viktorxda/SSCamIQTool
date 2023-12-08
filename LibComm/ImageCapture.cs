@@ -10,11 +10,11 @@ namespace SSCamIQTool.LibComm;
 
 public class ImageCapture
 {
-    private IQComm captureComm;
+    private readonly IQComm captureComm;
 
-    private SensorInfo sensorInfo;
+    private readonly SensorInfo sensorInfo;
 
-    private Control control;
+    private readonly Control control;
 
     private ChipID m_chipID;
 
@@ -62,23 +62,12 @@ public class ImageCapture
 
     private void GetFbcDecodeChipType(ChipID chipId, ref CHIP_INFO_ID chipInfoId)
     {
-        switch (chipId)
+        chipInfoId = chipId switch
         {
-            case ChipID.I6E:
-            case ChipID.P3:
-                chipInfoId = CHIP_INFO_ID.eCHIP_INFO_ID_PUDDING;
-                break;
-            case ChipID.M6:
-            case ChipID.I7:
-            case ChipID.M6P:
-            case ChipID.I6C:
-            case ChipID.P5:
-                chipInfoId = CHIP_INFO_ID.eCHIP_INFO_ID_TIRAMISU;
-                break;
-            default:
-                chipInfoId = CHIP_INFO_ID.eCHIP_INFO_ID_MAX;
-                break;
-        }
+            ChipID.I6E or ChipID.P3 => CHIP_INFO_ID.eCHIP_INFO_ID_PUDDING,
+            ChipID.M6 or ChipID.I7 or ChipID.M6P or ChipID.I6C or ChipID.P5 => CHIP_INFO_ID.eCHIP_INFO_ID_TIRAMISU,
+            _ => CHIP_INFO_ID.eCHIP_INFO_ID_MAX,
+        };
     }
 
     public void SetSclSetting(int device, int channel, int port)
@@ -91,16 +80,13 @@ public class ImageCapture
     private void GetImageResolution(CAMERA_MODE_TYPE type)
     {
         int num = 0;
-        int num2 = 0;
         byte[] pbyRcvData = null;
-        byte[] array = null;
         short[] src = new short[1] { 106 };
         short[] src2 = new short[1] { 1 };
         int[] src3 = new int[1];
-        int num3 = 0;
         int num4 = 0;
         CONNECT_MODE cONNECT_MODE = captureComm.ConnectMode;
-        array = new byte[12];
+        byte[] array = new byte[12];
         Buffer.BlockCopy(src, 0, array, num4, 2);
         num4 += 2;
         Buffer.BlockCopy(src2, 0, array, num4, 2);
@@ -108,7 +94,7 @@ public class ImageCapture
         Buffer.BlockCopy(src3, 0, array, num4, 4);
         num4 += 4;
         Buffer.BlockCopy(new int[1] { (int)type }, 0, array, num4, 4);
-        num3 = cONNECT_MODE switch
+        int num3 = cONNECT_MODE switch
         {
             CONNECT_MODE.MODE_SOCKET => captureComm.ReceiveApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, array, out pbyRcvData),
             CONNECT_MODE.MODE_UART => captureComm.ReceiveUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, array, out pbyRcvData),
@@ -116,8 +102,8 @@ public class ImageCapture
         };
         if (num3 >= 8)
         {
-            num2 = BitConverter.ToUInt16(pbyRcvData, 2);
-            pbyRcvData = pbyRcvData.Skip(4 + 4 * num2).ToArray();
+            int num2 = BitConverter.ToUInt16(pbyRcvData, 2);
+            pbyRcvData = pbyRcvData.Skip(4 + (4 * num2)).ToArray();
             uint width = BitConverter.ToUInt32(pbyRcvData, num * 4);
             num++;
             uint height = BitConverter.ToUInt32(pbyRcvData, num * 4);
@@ -146,60 +132,60 @@ public class ImageCapture
         switch (m_chipID)
         {
             case ChipID.I1:
-                captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
-                captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
+                _ = captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
+                _ = captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
                 break;
             case ChipID.I3:
-                captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
-                captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
+                _ = captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
+                _ = captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
                 break;
             case ChipID.M5:
             case ChipID.M5U:
                 if (connectMode == CONNECT_MODE.MODE_USB)
                 {
-                    captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 break;
             case ChipID.I2:
                 if (connectMode == CONNECT_MODE.MODE_SOCKET)
                 {
-                    captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 else if (connectMode == CONNECT_MODE.MODE_USB)
                 {
-                    captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 break;
             case ChipID.I5:
                 if (connectMode == CONNECT_MODE.MODE_SOCKET)
                 {
-                    captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 else if (connectMode == CONNECT_MODE.MODE_USB)
                 {
-                    captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 break;
             default:
                 if (connectMode == CONNECT_MODE.MODE_SOCKET)
                 {
-                    captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 else if (connectMode == CONNECT_MODE.MODE_USB)
                 {
-                    captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveUsbApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 else if (connectMode == CONNECT_MODE.MODE_UART)
                 {
-                    captureComm.ReceiveUartApiPacket(apiIDValue2, out pbyRcvData);
-                    captureComm.ReceiveUartApiPacket(apiIDValue, out pbyRcvData2);
+                    _ = captureComm.ReceiveUartApiPacket(apiIDValue2, out pbyRcvData);
+                    _ = captureComm.ReceiveUartApiPacket(apiIDValue, out pbyRcvData2);
                 }
                 break;
         }
@@ -212,17 +198,16 @@ public class ImageCapture
 
     private string GetImageFilePath(EXPOSURE_TYPE_E exposure_type, CAMERA_MODE_TYPE type, string strName)
     {
-        string text = "";
-        string text2 = "";
-        string text3 = "";
-        string text4 = "";
-        string text5 = "";
         DateTime now = DateTime.Now;
-        ImageInfo imageInfo = new ImageInfo();
-        imageInfo.CaptureType = type;
-        imageInfo.HdrEnable = m_HdrEnable;
-        imageInfo.ExposureType = exposure_type;
-        text3 = Application.StartupPath + SettingsComm.Default.SaveFolder;
+        ImageInfo imageInfo = new()
+        {
+            CaptureType = type,
+            HdrEnable = m_HdrEnable,
+            ExposureType = exposure_type
+        };
+        string text3 = Application.StartupPath + SettingsComm.Default.SaveFolder;
+        string text;
+        string text2;
         switch (type)
         {
             case CAMERA_MODE_TYPE.CAMERA_MODE_ISP_OUT:
@@ -246,48 +231,40 @@ public class ImageCapture
                 text = ".raw";
                 break;
         }
-        text5 = GetImageInfo(imageInfo);
-        text4 = type != 0 ? sensorInfo.ToString() : sensorInfo.ScOutToString();
-        if (type == CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW || type == CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM)
-        {
-            return text3 + "\\" + text2 + "_" + strName + "_" + text4 + now.Month.ToString("D2") + now.Day.ToString("D2") + now.Hour.ToString("D2") + now.Minute.ToString("D2") + now.Second.ToString("D2") + "_[" + text5 + "]" + text;
-        }
-        return text3 + "\\" + text2 + "_" + strName + "_" + text4 + now.Month.ToString("D2") + now.Day.ToString("D2") + now.Hour.ToString("D2") + now.Minute.ToString("D2") + now.Second.ToString("D2") + "_[" + text5 + "]" + text;
+
+        string text5 = GetImageInfo(imageInfo);
+        string text4 = type != 0 ? sensorInfo.ToString() : sensorInfo.ScOutToString();
+        return type is CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW or CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM
+            ? text3 + "\\" + text2 + "_" + strName + "_" + text4 + now.Month.ToString("D2") + now.Day.ToString("D2") + now.Hour.ToString("D2") + now.Minute.ToString("D2") + now.Second.ToString("D2") + "_[" + text5 + "]" + text
+            : text3 + "\\" + text2 + "_" + strName + "_" + text4 + now.Month.ToString("D2") + now.Day.ToString("D2") + now.Hour.ToString("D2") + now.Minute.ToString("D2") + now.Second.ToString("D2") + "_[" + text5 + "]" + text;
     }
 
     private int runCmd(string dir, string exe_path, string cmd_str)
     {
-        using (Process process = new Process())
+        using Process process = new();
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.ErrorDialog = false;
+        process.StartInfo.RedirectStandardError = false;
+        process.StartInfo.RedirectStandardOutput = false;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = exe_path;
+        process.StartInfo.Arguments = cmd_str;
+        if (!string.IsNullOrEmpty(dir))
         {
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.ErrorDialog = false;
-            process.StartInfo.RedirectStandardError = false;
-            process.StartInfo.RedirectStandardOutput = false;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = exe_path;
-            process.StartInfo.Arguments = cmd_str;
-            if (!string.IsNullOrEmpty(dir))
-            {
-                process.StartInfo.WorkingDirectory = dir;
-            }
-            if (!File.Exists(exe_path))
-            {
-                return -1;
-            }
-            process.Start();
-            process.WaitForExit();
-            if (process.ExitCode != 0)
-            {
-                return process.ExitCode;
-            }
+            process.StartInfo.WorkingDirectory = dir;
         }
-        return 0;
+        if (!File.Exists(exe_path))
+        {
+            return -1;
+        }
+        _ = process.Start();
+        process.WaitForExit();
+        return process.ExitCode != 0 ? process.ExitCode : 0;
     }
 
     private string GetModulePath(MODULE_TYPE_E type)
     {
-        string text = "";
-        text = Directory.GetCurrentDirectory();
+        string text = Directory.GetCurrentDirectory();
         switch (type)
         {
             case MODULE_TYPE_E.MODULE_DSC_DIR_E:
@@ -302,27 +279,23 @@ public class ImageCapture
 
     private string GetDscDecodePara()
     {
-        string text = "";
-        text = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "config.cfg";
+        string text = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "config.cfg";
         return "-F " + text;
     }
 
     private string RunDscDecode(string origin_file, string file)
     {
-        string text = "";
         string result = "";
-        string text2 = "";
-        string text3 = "";
         string path = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "file_list.txt";
-        text3 = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "\\dsc_origin.out.yuv";
-        using (FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+        string text3 = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "\\dsc_origin.out.yuv";
+        using (FileStream stream = new(path, FileMode.Create, FileAccess.ReadWrite))
         {
-            StreamWriter streamWriter = new StreamWriter(stream);
+            StreamWriter streamWriter = new(stream);
             streamWriter.WriteLine("dsc_origin.dsc");
             streamWriter.Close();
         }
-        text = GetDscDecodePara();
-        text2 = GetModulePath(MODULE_TYPE_E.MODULE_DSC_EXE_E);
+        string text = GetDscDecodePara();
+        string text2 = GetModulePath(MODULE_TYPE_E.MODULE_DSC_EXE_E);
         if (runCmd(GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E), text2, text) == 0)
         {
             if (File.Exists(text3))
@@ -344,15 +317,14 @@ public class ImageCapture
 
     private string FbcDecodeRaw(string origin_file, string strFileName)
     {
-        int num = 0;
         string result = "";
         CHIP_INFO_ID chipInfoId = CHIP_INFO_ID.eCHIP_INFO_ID_PUDDING;
         if (!File.Exists(origin_file))
         {
             return "File Not Exist:" + origin_file;
         }
-        FileInfo fileInfo = new FileInfo(origin_file);
-        num = sensorInfo.Height;
+        FileInfo fileInfo = new(origin_file);
+        int num = sensorInfo.Height;
         if (fileInfo.Length == sensorInfo.Width * sensorInfo.Height * 2)
         {
             num = sensorInfo.Height * 2;
@@ -379,24 +351,22 @@ public class ImageCapture
     public string SaveImage(EXPOSURE_TYPE_E exposure_type, byte[] pImageFile, CAMERA_MODE_TYPE type, string strPrefix)
     {
         string result = "";
-        string text = "";
-        string text2 = "";
-        string text3 = "";
         GetImageResolution(type);
-        text = GetImageFilePath(exposure_type, type, strPrefix);
-        text2 = Application.StartupPath + SettingsComm.Default.SaveFolder;
+        string text = GetImageFilePath(exposure_type, type, strPrefix);
+        string text2 = Application.StartupPath + SettingsComm.Default.SaveFolder;
         if (pImageFile != null)
         {
             try
             {
                 if (!Directory.Exists(text2))
                 {
-                    Directory.CreateDirectory(text2);
+                    _ = Directory.CreateDirectory(text2);
                 }
                 RAW_COMPRESS_TYPE_E rAW_COMPRESS_TYPE_E = RAW_COMPRESS_TYPE_E.RAW_COMPRESS_NONE_E;
                 rAW_COMPRESS_TYPE_E = (RAW_COMPRESS_TYPE_E)GeRawCompress(12804);
                 if (type == CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW)
                 {
+                    string text3;
                     switch (rAW_COMPRESS_TYPE_E)
                     {
                         case RAW_COMPRESS_TYPE_E.RAW_COMPRESS_DSC_E:
@@ -404,7 +374,7 @@ public class ImageCapture
                                 text3 = GetModulePath(MODULE_TYPE_E.MODULE_DSC_DIR_E) + "\\dsc_origin.dsc";
                                 using (FileStream output3 = File.Open(text3, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
-                                    using BinaryWriter binaryWriter3 = new BinaryWriter(output3);
+                                    using BinaryWriter binaryWriter3 = new(output3);
                                     binaryWriter3.Write(pImageFile);
                                 }
                                 result = DscDecodeRaw(text3, text);
@@ -415,7 +385,7 @@ public class ImageCapture
                                 text3 = text2 + "\\origin_no_decode.raw";
                                 using (FileStream output2 = File.Open(text3, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
-                                    using BinaryWriter binaryWriter2 = new BinaryWriter(output2);
+                                    using BinaryWriter binaryWriter2 = new(output2);
                                     binaryWriter2.Write(pImageFile);
                                 }
                                 if (m_HdrEnable == 1)
@@ -439,11 +409,9 @@ public class ImageCapture
                             }
                         default:
                             {
-                                using (FileStream output = File.Open(text, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                                {
-                                    using BinaryWriter binaryWriter = new BinaryWriter(output);
-                                    binaryWriter.Write(pImageFile);
-                                }
+                                using FileStream output = File.Open(text, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                using BinaryWriter binaryWriter = new(output);
+                                binaryWriter.Write(pImageFile);
                                 break;
                             }
                     }
@@ -451,7 +419,7 @@ public class ImageCapture
                 else
                 {
                     using FileStream output4 = File.Open(text, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    using BinaryWriter binaryWriter4 = new BinaryWriter(output4);
+                    using BinaryWriter binaryWriter4 = new(output4);
                     binaryWriter4.Write(pImageFile);
                 }
             }
@@ -469,22 +437,19 @@ public class ImageCapture
 
     private string DecodeRawStream(int count, string dir, string strOriginFile, string strImageFile)
     {
-        int num = 0;
         string text = "";
-        string text2 = "";
-        string text3 = "";
-        string text4 = "";
-        List<string> list = new List<string>();
+        List<string> list = new();
         if (stCaptureInfo.CompressType == 0)
         {
             return text;
         }
-        text2 = GetDecodeInputRawSuffix();
+        string text2 = GetDecodeInputRawSuffix();
         SplitFile(count, dir, strOriginFile);
+        int num;
         for (num = 0; num < count; num++)
         {
-            text3 = dir + "\\split_" + num + text2;
-            text4 = dir + "\\decode_" + num + ".raw";
+            string text3 = dir + "\\split_" + num + text2;
+            string text4 = dir + "\\decode_" + num + ".raw";
             if (!File.Exists(text3))
             {
                 text = "File not Exist";
@@ -514,7 +479,7 @@ public class ImageCapture
             list.Add(text4);
         }
         CombineFile(list, strImageFile);
-        RemoveFileList(list);
+        _ = RemoveFileList(list);
         return text;
     }
 
@@ -528,13 +493,13 @@ public class ImageCapture
             switch (cONNECT_MODE)
             {
                 case CONNECT_MODE.MODE_USB:
-                    captureComm.SendUSBApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
+                    _ = captureComm.SendUSBApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
                     break;
                 case CONNECT_MODE.MODE_SOCKET:
-                    captureComm.SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
+                    _ = captureComm.SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
                     break;
                 case CONNECT_MODE.MODE_UART:
-                    captureComm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
+                    _ = captureComm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, apiBufferByDataArray, apiBufferByDataArray.Length);
                     break;
             }
         }
@@ -550,13 +515,13 @@ public class ImageCapture
             switch (cONNECT_MODE)
             {
                 case CONNECT_MODE.MODE_USB:
-                    captureComm.SendUSBApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
+                    _ = captureComm.SendUSBApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
                     break;
                 case CONNECT_MODE.MODE_SOCKET:
-                    captureComm.SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
+                    _ = captureComm.SendApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
                     break;
                 case CONNECT_MODE.MODE_UART:
-                    captureComm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
+                    _ = captureComm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, sendBufferByDataArray, sendBufferByDataArray.Length);
                     break;
             }
         }
@@ -615,21 +580,17 @@ public class ImageCapture
         byte[] pbyRcvData = null;
         if (captureComm.ConnectMode == CONNECT_MODE.MODE_USB)
         {
-            captureComm.ReceiveUSBPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
+            _ = captureComm.ReceiveUSBPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
         }
         else if (captureComm.ConnectMode == CONNECT_MODE.MODE_UART)
         {
-            captureComm.ReceiveUartPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
+            _ = captureComm.ReceiveUartPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
         }
         else if (captureComm.ConnectMode == CONNECT_MODE.MODE_SOCKET)
         {
-            captureComm.ReceivePacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
+            _ = captureComm.ReceivePacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_MODE, out pbyRcvData);
         }
-        if (pbyRcvData[0] == 0)
-        {
-            return 0;
-        }
-        return 1;
+        return pbyRcvData[0] == 0 ? 0 : 1;
     }
 
     private string GetDecodeInputRawSuffix()
@@ -645,18 +606,18 @@ public class ImageCapture
 
     private void SplitFileBySize(string strOrigin, string strDst, int nStarIndex, int nSplitSize)
     {
-        FileInfo fileInfo = new FileInfo(strOrigin);
+        FileInfo fileInfo = new(strOrigin);
         if (nStarIndex + nSplitSize > fileInfo.Length)
         {
             return;
         }
-        using FileStream fileStream = new FileStream(strOrigin, FileMode.Open, FileAccess.Read);
-        fileStream.Seek(nStarIndex, SeekOrigin.Begin);
-        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+        using FileStream fileStream = new(strOrigin, FileMode.Open, FileAccess.Read);
+        _ = fileStream.Seek(nStarIndex, SeekOrigin.Begin);
+        using (BinaryReader binaryReader = new(fileStream))
         {
             byte[] buffer = binaryReader.ReadBytes(nSplitSize);
-            using FileStream output = new FileStream(strDst, FileMode.Create);
-            using BinaryWriter binaryWriter = new BinaryWriter(output);
+            using FileStream output = new(strDst, FileMode.Create);
+            using BinaryWriter binaryWriter = new(output);
             binaryWriter.Write(buffer);
         }
         fileStream.Dispose();
@@ -664,19 +625,18 @@ public class ImageCapture
 
     private void SplitFile(int count, string dir, string origin_file)
     {
-        string text = "";
         int count2 = (int)(new FileInfo(origin_file).Length / count);
-        text = GetDecodeInputRawSuffix();
-        using FileStream input = new FileStream(origin_file, FileMode.Open, FileAccess.Read);
-        using BinaryReader binaryReader = new BinaryReader(input);
+        string text = GetDecodeInputRawSuffix();
+        using FileStream input = new(origin_file, FileMode.Open, FileAccess.Read);
+        using BinaryReader binaryReader = new(input);
         int num = 0;
         while (count > 0)
         {
             string path = dir + "\\split_" + num + text;
             byte[] buffer = binaryReader.ReadBytes(count2);
-            using (FileStream output = new FileStream(path, FileMode.Create))
+            using (FileStream output = new(path, FileMode.Create))
             {
-                using BinaryWriter binaryWriter = new BinaryWriter(output);
+                using BinaryWriter binaryWriter = new(output);
                 binaryWriter.Write(buffer);
             }
             count--;
@@ -686,15 +646,15 @@ public class ImageCapture
 
     public void CombineFile(List<string> infileName, string outfileName)
     {
-        int num = 0;
         int count = infileName.Count;
         FileStream[] array = new FileStream[count];
-        using FileStream fileStream = new FileStream(outfileName, FileMode.Create);
+        using FileStream fileStream = new(outfileName, FileMode.Create);
         for (int i = 0; i < count; i++)
         {
             try
             {
                 array[i] = new FileStream(infileName[i], FileMode.Open);
+                int num;
                 while ((num = array[i].ReadByte()) != -1)
                 {
                     fileStream.WriteByte((byte)num);
@@ -702,7 +662,7 @@ public class ImageCapture
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
             }
             finally
             {
@@ -733,25 +693,24 @@ public class ImageCapture
 
     private int GetRawData(uint itemId, uint nTransCnt, ref string strResult)
     {
-        int num = 0;
         int num2 = 1;
         int showProgress = 0;
         int num3 = 0;
         string strPrefix = "long";
-        byte[] pImageBuffer = null;
         m_HdrEnable = GetHdrMode();
         if (m_HdrEnable == 1)
         {
             num2 = 2;
         }
         strResult = "";
+        int num;
         for (num = 0; num < num2; num++)
         {
             if (num >= 1)
             {
                 showProgress = 1;
             }
-            if (GetImageByProtocol(CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW, itemId, nTransCnt, showProgress, out pImageBuffer) <= 0)
+            if (GetImageByProtocol(CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW, itemId, nTransCnt, showProgress, out byte[] pImageBuffer) <= 0)
             {
                 strResult = "Get Raw Data Fail.";
                 break;
@@ -776,27 +735,24 @@ public class ImageCapture
 
     private int GetRawStream(uint itemId, uint nTransCnt, ref string strResult)
     {
-        int num = 0;
         int num2 = 0;
         int showProgress = 0;
-        string text = "";
-        string text2 = "";
-        string text3 = "";
-        string text4 = "";
-        byte[] pImageBuffer = null;
-        List<string> list = new List<string>();
-        text3 = Application.StartupPath + SettingsComm.Default.SaveFolder;
+        List<string> list = new();
+        string text3 = Application.StartupPath + SettingsComm.Default.SaveFolder;
         if (!Directory.Exists(text3))
         {
-            Directory.CreateDirectory(text3);
+            _ = Directory.CreateDirectory(text3);
         }
+        int num;
+        string text;
         for (num = 0; num < m_RawLoopCount; num++)
         {
             if (num >= 1)
             {
                 showProgress = 1;
             }
-            if (GetImageByProtocol(CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM, itemId, nTransCnt, showProgress, out pImageBuffer) < 0)
+
+            if (GetImageByProtocol(CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM, itemId, nTransCnt, showProgress, out byte[] pImageBuffer) < 0)
             {
                 strResult = "Get camera image error!";
                 break;
@@ -804,7 +760,7 @@ public class ImageCapture
             text = text3 + "\\raw_stream_" + num + ".raw";
             using (FileStream output = File.Open(text, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-                using BinaryWriter binaryWriter = new BinaryWriter(output);
+                using BinaryWriter binaryWriter = new(output);
                 binaryWriter.Write(pImageBuffer);
             }
             list.Add(text);
@@ -814,7 +770,9 @@ public class ImageCapture
                 num2 += (int)stCaptureInfo.Count;
             }
         }
-        text4 = m_HdrEnable != 0 ? "hdr" : "normal";
+
+        string text4 = m_HdrEnable != 0 ? "hdr" : "normal";
+        string text2;
         if (stCaptureInfo.CompressType == 0)
         {
             if (list.Count > 0)
@@ -828,7 +786,7 @@ public class ImageCapture
             text = text3 + "\\raw_stream_combine.raw";
             text2 = GetImageFilePath(EXPOSURE_TYPE_E.EXPOSURE_LONG_E, CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM, text4);
             CombineFile(list, text);
-            DecodeRawStream(num2, text3, text, text2);
+            _ = DecodeRawStream(num2, text3, text, text2);
             if (File.Exists(text))
             {
                 try
@@ -841,7 +799,7 @@ public class ImageCapture
                 }
             }
         }
-        RemoveFileList(list);
+        _ = RemoveFileList(list);
         return list.Count;
     }
 
@@ -849,10 +807,8 @@ public class ImageCapture
     {
         int num = 0;
         string strResult = "";
-        string text = "";
         uint num2 = 0u;
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = default;
-        byte[] pImageBuffer = null;
         if (type == CAMERA_MODE_TYPE.CAMERA_MODE_ISP_RAW_STRM)
         {
             SetRawFrameCount();
@@ -898,7 +854,8 @@ public class ImageCapture
                 case CAMERA_MODE_TYPE.CAMERA_MODE_SCL_OUT:
                 case CAMERA_MODE_TYPE.CAMERA_MODE_ISP_OUT:
                 case CAMERA_MODE_TYPE.CAMERA_MODE_ENC_JPEG:
-                    text = m_HdrEnable != 0 ? "hdr" : "normal";
+                    string text = m_HdrEnable != 0 ? "hdr" : "normal";
+                    byte[] pImageBuffer;
                     num = GetImageByProtocol(type, (uint)type, num2, 0, out pImageBuffer);
                     strResult = num > 0 ? SaveImage(EXPOSURE_TYPE_E.EXPOSURE_LONG_E, pImageBuffer, type, text) : "Get camera image error!";
                     break;

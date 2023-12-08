@@ -5,8 +5,6 @@ namespace SSCamIQTool.LibComm;
 
 public class PacketParser
 {
-    private const int startIndex = 8;
-
     public static void ConvertBufferToType(SensorInfo sensorInfo, byte[] sensorBuffer)
     {
         sensorInfo.Width = BitConverter.ToInt32(sensorBuffer, 8);
@@ -30,7 +28,7 @@ public class PacketParser
         imageInfo.ShortDGain = BitConverter.ToInt32(aeBuffer, 40);
         imageInfo.ShortExpoTime = BitConverter.ToInt32(aeBuffer, 44);
         imageInfo.BVx16384 = BitConverter.ToInt32(aeBuffer, 572);
-        if (chipid == ChipID.I1 || chipid == ChipID.I3 || chipid == ChipID.I2 || chipid == ChipID.M5 || chipid == ChipID.M5U)
+        if (chipid is ChipID.I1 or ChipID.I3 or ChipID.I2 or ChipID.M5 or ChipID.M5U)
         {
             imageInfo.RGain = BitConverter.ToInt16(awbBuffer, 8);
             imageInfo.GGain = BitConverter.ToInt16(awbBuffer, 10);
@@ -62,9 +60,8 @@ public class PacketParser
 
     public static void ConvertBufferToTypeForI3(ref ushort apiVerMajor, ref ushort apiVerMinor, byte[] versionBuffer)
     {
-        int num = 0;
         int num2 = 4;
-        num = BitConverter.ToUInt16(versionBuffer, 2);
+        int num = BitConverter.ToUInt16(versionBuffer, 2);
         if (num <= 0)
         {
             return;
@@ -73,9 +70,9 @@ public class PacketParser
         ushort[] array2 = new ushort[num];
         for (int i = 0; i < num; i++)
         {
-            array[i] = BitConverter.ToInt32(versionBuffer, num2 + i * 4);
+            array[i] = BitConverter.ToInt32(versionBuffer, num2 + (i * 4));
         }
-        versionBuffer = versionBuffer.Skip(num2 + num * 4).ToArray();
+        versionBuffer = versionBuffer.Skip(num2 + (num * 4)).ToArray();
         for (int j = 0; j < num; j++)
         {
             array2[j] = BitConverter.ToUInt16(Enumerable.Take(count: j >= num - 1 ? versionBuffer.Length - array[j] : array[j + 1] - array[j], source: versionBuffer.Skip(array[j])).ToArray(), 0);
@@ -124,11 +121,10 @@ public class PacketParser
         int num = 0;
         short value2 = 1;
         int num2 = data.Length;
-        byte[] array2 = null;
         try
         {
-            array = new byte[8 + num2 * 4];
-            array2 = BitConverter.GetBytes(apiId);
+            array = new byte[8 + (num2 * 4)];
+            byte[] array2 = BitConverter.GetBytes(apiId);
             Buffer.BlockCopy(array2, 0, array, 0, array2.Length);
             num += array2.Length;
             array2 = BitConverter.GetBytes(value2);
@@ -146,7 +142,7 @@ public class PacketParser
         }
         catch (Exception ex)
         {
-            ex.ToString();
+            _ = ex.ToString();
         }
         return array;
     }
@@ -157,11 +153,10 @@ public class PacketParser
         int num = 0;
         int num2 = 0;
         short num3 = (short)data.Length;
-        byte[] array2 = null;
         try
         {
-            array = new byte[4 + num3 * 4 + num3 * 4];
-            array2 = BitConverter.GetBytes(apiId);
+            array = new byte[4 + (num3 * 4) + (num3 * 4)];
+            byte[] array2 = BitConverter.GetBytes(apiId);
             Buffer.BlockCopy(array2, 0, array, 0, array2.Length);
             num2 += array2.Length;
             array2 = BitConverter.GetBytes(num3);
@@ -183,7 +178,7 @@ public class PacketParser
         }
         catch (Exception ex)
         {
-            ex.ToString();
+            _ = ex.ToString();
         }
         return array;
     }

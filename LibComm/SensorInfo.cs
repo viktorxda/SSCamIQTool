@@ -46,16 +46,14 @@ public class SensorInfo
         int num2 = Height;
         if (Width % 32 != 0)
         {
-            num = (Width / 32 + 1) * 32;
+            num = ((Width / 32) + 1) * 32;
         }
         if (Height % 32 != 0)
         {
-            num2 = (Height / 32 + 1) * 32;
+            num2 = ((Height / 32) + 1) * 32;
         }
-        if (Width != num || Height != num2)
-        {
-            return Width + "x" + Height + "[" + num + "x" + num2 + "]_" + Precision.ToString().Substring(3) + "_" + BayerID.ToString() + "_";
-        }
-        return Width + "x" + Height + "_" + Precision.ToString().Substring(3) + "_" + BayerID.ToString() + "_";
+        return Width != num || Height != num2
+            ? Width + "x" + Height + "[" + num + "x" + num2 + "]_" + Precision.ToString().Substring(3) + "_" + BayerID.ToString() + "_"
+            : Width + "x" + Height + "_" + Precision.ToString().Substring(3) + "_" + BayerID.ToString() + "_";
     }
 }

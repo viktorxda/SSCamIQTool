@@ -64,7 +64,7 @@ public class GuiGroup
         string result = "";
         int num = 0;
         CONNECT_MODE connectMode = comm.ConnectMode;
-        if (Action == API_ACTION.RW || Action == API_ACTION.R)
+        if (Action is API_ACTION.RW or API_ACTION.R)
         {
             switch (connectMode)
             {
@@ -91,7 +91,7 @@ public class GuiGroup
         string result = "";
         int num = 0;
         CONNECT_MODE connectMode = comm.ConnectMode;
-        if (Action == API_ACTION.RW || Action == API_ACTION.R)
+        if (Action is API_ACTION.RW or API_ACTION.R)
         {
             switch (connectMode)
             {
@@ -123,12 +123,11 @@ public class GuiGroup
 
     public string ReadUartGroup(IQComm comm)
     {
-        byte[] pbyRcvData = null;
         string result = "";
         _ = GetBytes().Length;
-        if (Action == API_ACTION.RW || Action == API_ACTION.R)
+        if (Action is API_ACTION.RW or API_ACTION.R)
         {
-            result = comm.ReceiveUartApiPacket(ID, out pbyRcvData) <= 0 ? "Api: " + Name + " receive data fail!!" : UpdateGroup(pbyRcvData);
+            result = comm.ReceiveUartApiPacket(ID, out byte[] pbyRcvData) <= 0 ? "Api: " + Name + " receive data fail!!" : UpdateGroup(pbyRcvData);
         }
         return result;
     }
@@ -136,10 +135,9 @@ public class GuiGroup
     public string ReadGroupBySending(IQComm comm)
     {
         byte[] pbyRcvData = null;
-        byte[] array = null;
         int num = 0;
         CONNECT_MODE connectMode = comm.ConnectMode;
-        array = GetBytes();
+        byte[] array = GetBytes();
         switch (connectMode)
         {
             case CONNECT_MODE.MODE_USB:
@@ -152,17 +150,12 @@ public class GuiGroup
                 num = comm.ReceiveUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_GET_API, array, out pbyRcvData);
                 break;
         }
-        if (num > 0)
-        {
-            return UpdateCaliPathGroup(pbyRcvData);
-        }
-        return "Api: " + Name + " receive packet fail!!";
+        return num > 0 ? UpdateCaliPathGroup(pbyRcvData) : "Api: " + Name + " receive packet fail!!";
     }
 
     public string ReadByPass(IQComm comm)
     {
         byte[] pbyRcvData = null;
-        byte[] array = null;
         short[] src = new short[1] { ID };
         short[] src2 = new short[1] { 1 };
         int[] src3 = new int[1];
@@ -170,7 +163,7 @@ public class GuiGroup
         int num = 0;
         int num2 = 0;
         CONNECT_MODE connectMode = comm.ConnectMode;
-        array = new byte[12];
+        byte[] array = new byte[12];
         Buffer.BlockCopy(src, 0, array, num2, 2);
         num2 += 2;
         Buffer.BlockCopy(src2, 0, array, num2, 2);
@@ -207,18 +200,17 @@ public class GuiGroup
 
     public string UpdateCaliPathGroup(byte[] buffer)
     {
-        int num = 0;
         int num2 = 4;
         string result = "";
-        num = BitConverter.ToUInt16(buffer, 2);
+        int num = BitConverter.ToUInt16(buffer, 2);
         if (num > 0)
         {
             int[] array = new int[num];
             for (int i = 0; i < num; i++)
             {
-                array[i] = BitConverter.ToInt32(buffer, num2 + i * 4);
+                array[i] = BitConverter.ToInt32(buffer, num2 + (i * 4));
             }
-            buffer = buffer.Skip(num2 + num * 4).ToArray();
+            buffer = buffer.Skip(num2 + (num * 4)).ToArray();
             for (int j = 0; j < num; j++)
             {
                 int count;
@@ -253,46 +245,34 @@ public class GuiGroup
 
     public string ReadCaliAWBGroup(IQComm comm, FILE_TRANSFER_ID type)
     {
-        byte[] pbyRcvData = null;
-        int num = 0;
         short apiId = (short)type;
         byte[] bytes = GetBytes();
-        num = comm.ReceiveCaliAWBApiPacket(apiId, out pbyRcvData);
+        int num = comm.ReceiveCaliAWBApiPacket(apiId, out byte[] pbyRcvData);
         for (int i = 37; i < 52; i++)
         {
             bytes[i - 16] = pbyRcvData[i];
         }
-        if (num > 0)
-        {
-            return UpdateGroup(bytes);
-        }
-        return "Api: " + Name + " receive packet fail!!";
+        return num > 0 ? UpdateGroup(bytes) : "Api: " + Name + " receive packet fail!!";
     }
 
     public string ReadCaliDPCGroup(IQComm comm, FILE_TRANSFER_ID type)
     {
-        byte[] pbyRcvData = null;
-        int num = 0;
         short apiId = (short)type;
         byte[] bytes = GetBytes();
-        num = comm.ReceiveCaliDPCApiPacket(apiId, out pbyRcvData);
+        int num = comm.ReceiveCaliDPCApiPacket(apiId, out byte[] pbyRcvData);
         for (int i = 53; i < 73; i++)
         {
             bytes[i - 20] = pbyRcvData[i];
         }
-        if (num > 0)
-        {
-            return UpdateGroup(bytes);
-        }
-        return "Api: " + Name + " receive packet fail!!";
+        return num > 0 ? UpdateGroup(bytes) : "Api: " + Name + " receive packet fail!!";
     }
 
     public string ReadGroup(IQComm comm, ref byte[] apiBuffer)
     {
         string result = "";
-        if (Action == API_ACTION.RW || Action == API_ACTION.R)
+        if (Action is API_ACTION.RW or API_ACTION.R)
         {
-            if (comm.ReceiveApiPacket(ID, out var pbyRcvData) > 0)
+            if (comm.ReceiveApiPacket(ID, out byte[] pbyRcvData) > 0)
             {
                 apiBuffer = pbyRcvData;
                 result = UpdateGroup(pbyRcvData);
@@ -353,18 +333,17 @@ public class GuiGroup
 
     public string UpdateGroup(byte[] buffer)
     {
-        int num = 0;
         int num2 = 4;
         string result = "";
-        num = BitConverter.ToUInt16(buffer, 2);
+        int num = BitConverter.ToUInt16(buffer, 2);
         if (num > 0)
         {
             int[] array = new int[num];
             for (int i = 0; i < num; i++)
             {
-                array[i] = BitConverter.ToInt32(buffer, num2 + i * 4);
+                array[i] = BitConverter.ToInt32(buffer, num2 + (i * 4));
             }
-            buffer = buffer.Skip(num2 + num * 4).ToArray();
+            buffer = buffer.Skip(num2 + (num * 4)).ToArray();
             for (int j = 0; j < num; j++)
             {
                 int count;
@@ -405,7 +384,7 @@ public class GuiGroup
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = default;
         iQ_CMD_RESPONSE_S.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
         iQ_CMD_RESPONSE_S.DataLen = 0;
-        if (Action == API_ACTION.RW || Action == API_ACTION.W)
+        if (Action is API_ACTION.RW or API_ACTION.W)
         {
             switch (connectMode)
             {
@@ -435,7 +414,7 @@ public class GuiGroup
         IQ_CMD_RESPONSE_S iQ_CMD_RESPONSE_S = default;
         iQ_CMD_RESPONSE_S.ResCode = IQ_RESPONSE_CODE_E.IQ_RES_ERROR;
         iQ_CMD_RESPONSE_S.DataLen = 0;
-        if (Action == API_ACTION.RW || Action == API_ACTION.W)
+        if (Action is API_ACTION.RW or API_ACTION.W)
         {
             switch (connectMode)
             {
@@ -460,9 +439,9 @@ public class GuiGroup
     public string WriteUartGroup(IQComm comm)
     {
         byte[] bytes = GetBytes();
-        if (Action == API_ACTION.RW || Action == API_ACTION.W)
+        if (Action is API_ACTION.RW or API_ACTION.W)
         {
-            comm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, bytes, bytes.Length);
+            _ = comm.SendUartApiPacket(CAMERA_CMD_TYPE.CAMERA_CMD_SET_API, bytes, bytes.Length);
             mv5setlength_str = bytes.Length.ToString();
         }
         return "";
@@ -494,7 +473,7 @@ public class GuiGroup
             Buffer.BlockCopy(array3, 0, array, num3, array3.Length);
             num3 += array3.Length;
         }
-        byte[] array4 = new byte[4 + paramIndex.Length * 4 + ValueSize];
+        byte[] array4 = new byte[4 + (paramIndex.Length * 4) + ValueSize];
         Buffer.BlockCopy(src, 0, array4, num2, 2);
         num2 += 2;
         Buffer.BlockCopy(src2, 0, array4, num2, 2);
@@ -675,7 +654,7 @@ public class GuiGroup
         byte[] array = new byte[12 + bytes.Length];
         BitConverter.GetBytes(magicKey).CopyTo(array, 0);
         ushort[] array2 = new ushort[2] { 4132, 4133 };
-        ushort num = (ushort)(bytes[1] << 8 | bytes[0]);
+        ushort num = (ushort)((bytes[1] << 8) | bytes[0]);
         for (int i = 0; i < array2.Length; i++)
         {
             if (num == array2[i])
