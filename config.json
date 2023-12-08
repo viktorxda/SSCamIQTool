@@ -1,0 +1,824 @@
+{
+  "ChipList": [
+    {
+      "name": "Mercury5",
+      "alias": "Mercury5",
+      "id": 217,
+      "CalibrateChipID": 16,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "Mercury5U",
+      "alias": "Mercury5",
+      "id": 238,
+      "CalibrateChipID": 16,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "iNfinityI1",
+      "alias": "iNfinityI1",
+      "id": 1835336475,
+      "CalibrateChipID": 0,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "TWINKIE",
+      "alias": "iNfinityI2",
+      "id": 1835336477,
+      "CalibrateChipID": 2,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "iNfinityI3",
+      "alias": "iNfinityI3",
+      "id": 1835336476,
+      "CalibrateChipID": 2,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "PRETZEL",
+      "alias": "iNfinityI5",
+      "id": 1835336478,
+      "CalibrateChipID": 3,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "MACARON",
+      "alias": "iNfinityI6",
+      "id": 1835336480,
+      "CalibrateChipID": 4,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 0,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "PUDDING",
+      "alias": "iNfinityI6E",
+      "id": 1835336481,
+      "CalibrateChipID": 5,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "ISPAHAN",
+      "alias": "iNfinityI6B0",
+      "id": 1835336482,
+      "CalibrateChipID": 6,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "TIRAMISU",
+      "alias": "Mercury6",
+      "id": 1835336483,
+      "CalibrateChipID": 17,
+      "SupportSCL": 1,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 0,
+          "GetScl": 0,
+          "GetJpeg": 0,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "IKAYAKI",
+      "alias": "Pioneer3",
+      "id": 1835336484,
+      "CalibrateChipID": 7,
+      "SupportSCL": 0,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "MUFFIN",
+      "alias": "iNfinityI7",
+      "id": 1835336485,
+      "CalibrateChipID": 18,
+      "SupportSCL": 1,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "MOCHI",
+      "alias": "Mercury6P",
+      "id": 1835336486,
+      "CalibrateChipID": 17,
+      "SupportSCL": 1,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "Maruko",
+      "alias": "iNfinity6C",
+      "id": 1835336487,
+      "CalibrateChipID": 17,
+      "SupportSCL": 1,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    },
+    {
+      "name": "Opera",
+      "alias": "Pioneer5",
+      "id": 1835336488,
+      "CalibrateChipID": 17,
+      "SupportSCL": 1,
+      "Function": [
+        {
+          "Protocol": "Network",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 1
+        },
+        {
+          "Protocol": "UVC",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        },
+        {
+          "Protocol": "UART",
+          "GetRaw": 1,
+          "GetYuv": 1,
+          "GetScl": 1,
+          "GetJpeg": 1,
+          "GetRawStream": 0
+        }
+      ]
+    }
+  ],
+  "Parameters": [
+    {
+      "chip": "iNfinityI1",
+      "QueryExposureInfo": 5,
+      "QueryWBInfo": 5,
+      "GetGamma": 16,
+      "I2CAccess": 32,
+      "QuerySensorInfo": 33,
+      "GetLinearityLUT": 34,
+      "GetOBCCALIB": 35,
+      "ApiVersion": 36,
+      "GetGammaEx": 39,
+      "GetIQIndex": 73,
+      "WBCT": 80,
+      "AWBCTStats": 81,
+      "AWBHWStats": 82,
+      "OBbits": 12
+    },
+    {
+      "chip": "iNfinityI3",
+      "QueryExposureInfo": 4099,
+      "QueryWBInfo": 4101,
+      "GetGamma": 4114,
+      "QuerySensorInfo": 8961,
+      "GetIQIndex": 8962,
+      "I2CAccess": 9729,
+      "GetOBCCALIB": 9730,
+      "WBCT": 9731,
+      "AWBCTStats": 9732,
+      "AWBHWStats": 9733,
+      "ApiVersion": 4135,
+      "AFWindow": 4136,
+      "OBbits": 12
+    },
+    {
+      "chip": "Mercury5",
+      "QueryExposureInfo": 4099,
+      "QueryWBInfo": 4102,
+      "GetGamma": 4114,
+      "QuerySensorInfo": 8961,
+      "GetIQIndex": 8962,
+      "I2CAccess": 9729,
+      "GetOBCCALIB": 9730,
+      "WBCT": 9731,
+      "AWBCTStats": 9732,
+      "AWBHWStats": 9733,
+      "ApiVersion": 4135,
+      "AFWindow": 4136,
+      "OBbits": 16
+    },
+    {
+      "chip": "Mercury5U",
+      "QueryExposureInfo": 4099,
+      "QueryWBInfo": 4102,
+      "GetGamma": 4114,
+      "QuerySensorInfo": 8961,
+      "GetIQIndex": 8962,
+      "I2CAccess": 9729,
+      "GetOBCCALIB": 9730,
+      "WBCT": 9731,
+      "AWBCTStats": 9732,
+      "AWBHWStats": 9733,
+      "ApiVersion": 4135,
+      "AFWindow": 4136,
+      "OBbits": 16
+    },
+    {
+      "chip": "TWINKIE",
+      "QueryExposureInfo": 5123,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetOBC": 4121,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "PRETZEL",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetOBC": 4116,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "MACARON",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetOBC": 4116,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9251,
+      "GetApplyOBC": 9232,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "PUDDING",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16,
+      "AEHisto0HwStats": 11778,
+      "AFStats": 11789,
+      "AFRoiWindow": 11790,
+      "AFRoiMode": 11793
+    },
+    {
+      "chip": "ISPAHAN",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "TIRAMISU",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "IKAYAKI",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11269,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16
+    },
+    {
+      "chip": "MUFFIN",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11783,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16,
+      "AEHisto0HwStats": 11778,
+      "AFStats": 11789,
+      "AFRoiWindow": 11790,
+      "AFRoiMode": 11793,
+      "GetNirIQDevice": 257,
+      "GetNirIQChannel": 258
+    },
+    {
+      "chip": "MOCHI",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11783,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16,
+      "AEHisto0HwStats": 11778,
+      "AFStats": 11789,
+      "AFRoiWindow": 11790,
+      "AFRoiMode": 11793
+    },
+    {
+      "chip": "Maruko",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11783,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16,
+      "AEHisto0HwStats": 11778,
+      "AFStats": 11789,
+      "AFRoiWindow": 11790,
+      "AFRoiMode": 11793,
+      "GetNirIQDevice": 257,
+      "GetNirIQChannel": 258
+    },
+    {
+      "chip": "Opera",
+      "QueryExposureInfo": 5122,
+      "QueryWBInfo": 6145,
+      "GetGamma": 4104,
+      "GetALSC": 4136,
+      "GetLSC": 4129,
+      "GetOBC": 4116,
+      "GetApplyALSC": 9237,
+      "GetApplyLSC": 9239,
+      "GetApplyOBC": 9232,
+      "QuerySensorInfo": 10241,
+      "GetIQIndex": 10242,
+      "I2CAccess": 11265,
+      "WBCT": 11267,
+      "AWBCTStats": 11268,
+      "AWBHWStats": 11783,
+      "AWBHWStatsShort": 11801,
+      "ApiVersion": 4097,
+      "AFWindow": 7170,
+      "OBbits": 16,
+      "AEHisto0HwStats": 11778,
+      "AFStats": 11789,
+      "AFRoiWindow": 11790,
+      "AFRoiMode": 11793
+    }
+  ]
+}
